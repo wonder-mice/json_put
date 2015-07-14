@@ -27,7 +27,7 @@ fwrite(json, 1, json_len, stdout);
 fprintf(stdout, "\n");
 ```
 
-Example (using std::string from C++):
+Example (using `std::string` from C++):
 
 ```c++
 std::string json;
