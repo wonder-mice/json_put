@@ -1,5 +1,5 @@
 # json_put
-Simple json writer for C (and C++)
+Zero-Footprint JSON Writer for C (and C++)
 
 Example (using fixed preallocated array):
 
