@@ -11,12 +11,12 @@ int main(int argc, char *argv[])
 	json_put_object_begin(&jp);
 		json_put_name(&jp, "numbers");
 		json_put_array_begin(&jp);
-			json_put_value(&jp, "1");
-			json_put_value(&jp, "2");
-			json_put_value(&jp, "3");
+			json_put_string(&jp, "1");
+			json_put_string(&jp, "2");
+			json_put_string(&jp, "3");
 		json_put_array_end(&jp);
 		json_put_name(&jp, "key");
-		json_put_value(&jp, "42");
+		json_put_string(&jp, "42");
 	json_put_object_end(&jp);
 	json_put_to_heap_buffer(&jp_buf, "\0", 1);
 	printf("JSON: %s\n", jp_buf.b);

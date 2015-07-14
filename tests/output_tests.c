@@ -35,7 +35,7 @@ static void test_mono_object()
 	JSON_PUT_TEST_BEGIN()
 	json_put_object_begin(&jp);
 	json_put_name(&jp, "key");
-	json_put_value(&jp, "value");
+	json_put_string(&jp, "value");
 	json_put_object_end(&jp);
 	JSON_PUT_TEST_END("{\"key\":\"value\"}")
 }
@@ -45,11 +45,11 @@ static void test_multi_object()
 	JSON_PUT_TEST_BEGIN()
 	json_put_object_begin(&jp);
 	json_put_name(&jp, "key1");
-	json_put_value(&jp, "value1");
+	json_put_string(&jp, "value1");
 	json_put_name(&jp, "key2");
-	json_put_value(&jp, "value2");
+	json_put_string(&jp, "value2");
 	json_put_name(&jp, "key3");
-	json_put_value(&jp, "value3");
+	json_put_string(&jp, "value3");
 	json_put_object_end(&jp);
 	JSON_PUT_TEST_END("{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"}")
 }
@@ -66,7 +66,7 @@ static void test_mono_array()
 {
 	JSON_PUT_TEST_BEGIN()
 	json_put_array_begin(&jp);
-	json_put_value(&jp, "value");
+	json_put_string(&jp, "value");
 	json_put_array_end(&jp);
 	JSON_PUT_TEST_END("[\"value\"]")
 }
@@ -75,9 +75,9 @@ static void test_multi_array()
 {
 	JSON_PUT_TEST_BEGIN()
 	json_put_array_begin(&jp);
-	json_put_value(&jp, "value1");
-	json_put_value(&jp, "value2");
-	json_put_value(&jp, "value3");
+	json_put_string(&jp, "value1");
+	json_put_string(&jp, "value2");
+	json_put_string(&jp, "value3");
 	json_put_array_end(&jp);
 	JSON_PUT_TEST_END("[\"value1\",\"value2\",\"value3\"]")
 }
@@ -88,21 +88,21 @@ static void test_array_inside_object()
 	json_put_object_begin(&jp);
 	json_put_name(&jp, "key1");
 		json_put_array_begin(&jp);
-			json_put_value(&jp, "a");
-			json_put_value(&jp, "b");
-			json_put_value(&jp, "c");
+			json_put_string(&jp, "a");
+			json_put_string(&jp, "b");
+			json_put_string(&jp, "c");
 		json_put_array_end(&jp);
 	json_put_name(&jp, "key2");
 		json_put_array_begin(&jp);
-			json_put_value(&jp, "d");
-			json_put_value(&jp, "e");
-			json_put_value(&jp, "f");
+			json_put_string(&jp, "d");
+			json_put_string(&jp, "e");
+			json_put_string(&jp, "f");
 		json_put_array_end(&jp);
 	json_put_name(&jp, "key3");
 		json_put_array_begin(&jp);
-			json_put_value(&jp, "g");
-			json_put_value(&jp, "h");
-			json_put_value(&jp, "i");
+			json_put_string(&jp, "g");
+			json_put_string(&jp, "h");
+			json_put_string(&jp, "i");
 		json_put_array_end(&jp);
 	json_put_object_end(&jp);
 	JSON_PUT_TEST_END("{\"key1\":[\"a\",\"b\",\"c\"],"
@@ -116,27 +116,27 @@ static void test_array_object_inside_array()
 	json_put_array_begin(&jp);
 		json_put_object_begin(&jp);
 			json_put_name(&jp, "k1");
-			json_put_value(&jp, "a");
+			json_put_string(&jp, "a");
 			json_put_name(&jp, "k2");
-			json_put_value(&jp, "b");
+			json_put_string(&jp, "b");
 			json_put_name(&jp, "k3");
-			json_put_value(&jp, "c");
+			json_put_string(&jp, "c");
 		json_put_object_end(&jp);
 		json_put_object_begin(&jp);
 			json_put_name(&jp, "k4");
-			json_put_value(&jp, "d");
+			json_put_string(&jp, "d");
 			json_put_name(&jp, "k5");
-			json_put_value(&jp, "e");
+			json_put_string(&jp, "e");
 			json_put_name(&jp, "k6");
-			json_put_value(&jp, "f");
+			json_put_string(&jp, "f");
 		json_put_object_end(&jp);
 		json_put_object_begin(&jp);
 			json_put_name(&jp, "k7");
-			json_put_value(&jp, "g");
+			json_put_string(&jp, "g");
 			json_put_name(&jp, "k8");
-			json_put_value(&jp, "h");
+			json_put_string(&jp, "h");
 			json_put_name(&jp, "k9");
-			json_put_value(&jp, "i");
+			json_put_string(&jp, "i");
 		json_put_object_end(&jp);
 	json_put_array_end(&jp);
 	JSON_PUT_TEST_END("[{\"k1\":\"a\",\"k2\":\"b\",\"k3\":\"c\"},"
@@ -151,30 +151,30 @@ static void test_mix()
 		json_put_name(&jp, "menu");
 		json_put_object_begin(&jp);
 			json_put_name(&jp, "id");
-			json_put_value(&jp, "file");
+			json_put_string(&jp, "file");
 			json_put_name(&jp, "value");
-			json_put_value(&jp, "File");
+			json_put_string(&jp, "File");
 			json_put_name(&jp, "popup");
 			json_put_object_begin(&jp);
 				json_put_name(&jp, "menuitem");
 				json_put_array_begin(&jp);
 					json_put_object_begin(&jp);
 						json_put_name(&jp, "value");
-						json_put_value(&jp, "New");
+						json_put_string(&jp, "New");
 						json_put_name(&jp, "onclick");
-						json_put_value(&jp, "CreateNewDoc()");
+						json_put_string(&jp, "CreateNewDoc()");
 					json_put_object_end(&jp);
 					json_put_object_begin(&jp);
 						json_put_name(&jp, "value");
-						json_put_value(&jp, "Open");
+						json_put_string(&jp, "Open");
 						json_put_name(&jp, "onclick");
-						json_put_value(&jp, "OpenDoc()");
+						json_put_string(&jp, "OpenDoc()");
 					json_put_object_end(&jp);
 					json_put_object_begin(&jp);
 						json_put_name(&jp, "value");
-						json_put_value(&jp, "Close");
+						json_put_string(&jp, "Close");
 						json_put_name(&jp, "onclick");
-						json_put_value(&jp, "CloseDoc()");
+						json_put_string(&jp, "CloseDoc()");
 					json_put_object_end(&jp);
 				json_put_array_end(&jp);
 			json_put_object_end(&jp);
@@ -191,9 +191,22 @@ static void test_escapes()
 {
 	JSON_PUT_TEST_BEGIN()
 	json_put_array_begin(&jp);
-	json_put_value_len(&jp, "\0\b\f\n\r\t\"\\", 8);
+	json_put_string_len(&jp, "\0\b\f\n\r\t\"\\", 8);
 	json_put_array_end(&jp);
 	JSON_PUT_TEST_END("[\"\\0\\b\\f\\n\\r\\t\\\"\\\\\"]")
+}
+
+static void test_numbers()
+{
+	JSON_PUT_TEST_BEGIN()
+	json_put_array_begin(&jp);
+	json_put_uint(&jp, 42);
+	json_put_uint(&jp, 0);
+	json_put_int(&jp, 123);
+	json_put_int(&jp, 0);
+	json_put_int(&jp, -7);
+	json_put_array_end(&jp);
+	JSON_PUT_TEST_END("[42,0,123,0,-7]")
 }
 
 int main(int argc, char *argv[])
@@ -209,5 +222,6 @@ int main(int argc, char *argv[])
 	test_array_object_inside_array();
 	test_mix();
 	test_escapes();
+	test_numbers();
 	return g_errors;
 }

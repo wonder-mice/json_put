@@ -89,9 +89,11 @@ int json_put_array_end(struct json_put *const jp);
 int json_put_name(struct json_put *const jp, const char *const name);
 int json_put_name_len(struct json_put *const jp, const char *const name,
 					  const size_t len);
-int json_put_value(struct json_put *const jp, const char *const value);
-int json_put_value_len(struct json_put *const jp, const char *const value,
-					   const size_t len);
+int json_put_string(struct json_put *const jp, const char *const value);
+int json_put_string_len(struct json_put *const jp, const char *const value,
+						const size_t len);
+int json_put_uint(struct json_put *const jp, const unsigned value);
+int json_put_int(struct json_put *const jp, const int value);
 
 /* Simple memory buffer. */
 struct json_put_buffer

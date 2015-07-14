@@ -32,6 +32,27 @@ static const char  *_escapee(const char *const b, const char *const e)
 	return e;
 }
 
+static char  *_uint_str(char *const e, unsigned value)
+{
+	char *p = e;
+	do
+	{
+		*--p = '0' + value % 10;
+	}
+	while (0 != (value /= 10));
+	return p;
+}
+
+static char  *_int_str(char *const e, int value)
+{
+	char *p = _uint_str(e, 0 <= value? value: -value);
+	if (0 > value)
+	{
+		*--p = '-';
+	}
+	return p;
+}
+
 static int _put(struct json_put *const jp,
 				const char *const s, const size_t len)
 {
@@ -76,6 +97,24 @@ static int _put_quoted(struct json_put *const jp,
 	return _put(jp, "\"", 1);
 }
 
+static int _put_name_comma(struct json_put *const jp)
+{
+	if (_FLAG_PUT_COMMA & jp->_flags)
+	{
+		_put(jp, ",", 1);
+	}
+	return jp->_err;
+}
+
+static int _put_value_comma(struct json_put *const jp)
+{
+	if (_FLAG_PUT_COMMA & jp->_flags && !(_FLAG_NAME_PUTS_COMMA & jp->_flags))
+	{
+		_put(jp, ",", 1);
+	}
+	return jp->_err;
+}
+
 void json_put_init(struct json_put *const jp,
 				  void *const buffer, const json_put_to_cb put)
 {
@@ -87,10 +126,7 @@ void json_put_init(struct json_put *const jp,
 
 int json_put_object_begin(struct json_put *const jp)
 {
-	if (_FLAG_PUT_COMMA & jp->_flags && !(_FLAG_NAME_PUTS_COMMA & jp->_flags))
-	{
-		_put(jp, ",", 1);
-	}
+	_put_value_comma(jp);
 	jp->_flags = 0;
 	return _put(jp, "{", 1);
 }
@@ -103,10 +139,7 @@ int json_put_object_end(struct json_put *const jp)
 
 int json_put_array_begin(struct json_put *const jp)
 {
-	if (_FLAG_PUT_COMMA & jp->_flags && !(_FLAG_PUT_COMMA & jp->_flags))
-	{
-		_put(jp, ",", 1);
-	}
+	_put_value_comma(jp);
 	jp->_flags = 0;
 	return _put(jp, "[", 1);
 }
@@ -125,29 +158,43 @@ int json_put_name(struct json_put *const jp, const char *const name)
 int json_put_name_len(struct json_put *const jp, const char *const name,
 					  const size_t len)
 {
-	if (_FLAG_PUT_COMMA & jp->_flags)
-	{
-		_put(jp, ",", 1);
-	}
+	_put_name_comma(jp);
 	jp->_flags |= _FLAG_PUT_COMMA | _FLAG_NAME_PUTS_COMMA;
 	_put_quoted(jp, name, len);
 	return _put(jp, ":", 1);
 }
 
-int json_put_value(struct json_put *const jp, const char *const value)
+int json_put_string(struct json_put *const jp, const char *const value)
 {
-	return	json_put_value_len(jp, value, strlen(value));
+	return	json_put_string_len(jp, value, strlen(value));
 }
 
-int json_put_value_len(struct json_put *const jp, const char *const value,
-					   const size_t len)
+int json_put_string_len(struct json_put *const jp, const char *const value,
+						const size_t len)
 {
-	if (_FLAG_PUT_COMMA & jp->_flags && !(_FLAG_NAME_PUTS_COMMA & jp->_flags))
-	{
-		_put(jp, ",", 1);
-	}
+	_put_value_comma(jp);
 	jp->_flags |= _FLAG_PUT_COMMA;
 	return _put_quoted(jp, value, len);
+}
+
+int json_put_uint(struct json_put *const jp, const unsigned value)
+{
+	_put_value_comma(jp);
+	jp->_flags |= _FLAG_PUT_COMMA;
+	char str[16];
+	char *const e = str + sizeof(str);
+	char *const p = _uint_str(e, value);
+	return _put(jp, p, e - p);
+}
+
+int json_put_int(struct json_put *const jp, const int value)
+{
+	_put_value_comma(jp);
+	jp->_flags |= _FLAG_PUT_COMMA;
+	char str[16];
+	char *const e = str + sizeof(str);
+	char *const p = _int_str(e, value);
+	return _put(jp, p, e - p);
 }
 
 void json_put_static_buffer_init(struct json_put_buffer *const buf,
